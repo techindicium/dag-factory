@@ -6,6 +6,7 @@ import yaml
 from airflow.models import DAG
 
 from dagfactory.dagbuilder import DagBuilder
+from dagfactory.parser import Parser
 
 # these are params that cannot be a dag name
 SYSTEM_PARAMS: List[str] = ["default", "task_groups"]
@@ -53,9 +54,8 @@ class DagFactory:
         """
         # pylint: disable=consider-using-with
         try:
-            config: Dict[str, Any] = yaml.load(
-                stream=open(config_filepath, "r", encoding="utf-8"),
-                Loader=yaml.FullLoader,
+            config: Dict[str, Any] = Parser().render(
+                config_filepath
             )
         except Exception as err:
             raise Exception("Invalid DAG Factory config file") from err
