@@ -13,8 +13,7 @@ def days_ago(days):
 
 
 def get_current_date():
-    today_date = datetime.today().strftime('%Y-%m-%d')
-    return today_date
+    return f'{{{{ds}}}}'
 
 
 class Parser:
