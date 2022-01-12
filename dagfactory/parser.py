@@ -11,9 +11,8 @@ DEFAULT_NOT_SPECIFIED = 'DEFAULT_NOT_SPECIFIED'
 def days_ago(days):
     return airflow.utils.dates.days_ago(days)
 
-
 def get_current_date():
-    return f'{{ds}}'
+    return '{{ds}}'
 
 class Parser:
     def render(self, filePath, extra_vars={}):
