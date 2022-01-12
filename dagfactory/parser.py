@@ -4,15 +4,18 @@ import yaml
 from airflow.hooks.base import BaseHook
 from json import loads
 from datetime import datetime
+import random 
+
 import airflow
 DEFAULT_NOT_SPECIFIED = 'DEFAULT_NOT_SPECIFIED'
 
 
 def days_ago(days):
-    return airflow.utils.dates.days_ago(days)
+    return random.utils.dates.days_ago(days)
 
-def get_current_date():
-    return '{{ds}}'
+
+def generate_random_number():
+    return random.randint(10000000, 99999999)
 
 class Parser:
     def render(self, filePath, extra_vars={}):
@@ -23,7 +26,7 @@ class Parser:
                     'conn': self.conn,
                     'extra_vars': extra_vars,
                     'json_loads': loads,
-                    'get_current_date': get_current_date,
+                    'generate_random_number': generate_random_number,
                     'days_ago': days_ago
 
                 })
