@@ -11,7 +11,7 @@ DEFAULT_NOT_SPECIFIED = 'DEFAULT_NOT_SPECIFIED'
 
 
 def days_ago(days):
-    return random.utils.dates.days_ago(days)
+    return airflow.utils.dates.days_ago(days)
 
 
 def generate_random_number():
