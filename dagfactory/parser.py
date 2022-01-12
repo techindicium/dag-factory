@@ -13,8 +13,7 @@ def days_ago(days):
 
 
 def get_current_date():
-    return f'{{{{ds}}}}'
-
+    return f'{{ds}}'
 
 class Parser:
     def render(self, filePath, extra_vars={}):
