@@ -1,20 +1,50 @@
 from airflow.models import Variable
 from jinja2 import Template
-import yaml, json
+import yaml
+from airflow.hooks.base import BaseHook
+from json import loads
+from datetime import datetime
+import random 
+
+import airflow
+DEFAULT_NOT_SPECIFIED = 'DEFAULT_NOT_SPECIFIED'
+
+
+def days_ago(days):
+    return airflow.utils.dates.days_ago(days)
+
+
+def generate_random_number():
+    return random.randint(10000000, 99999999)
 
 class Parser:
-    def render(self, filePath):
+    def render(self, filePath, extra_vars={}):
         try:
             with open(filePath, "r") as f:
                 template = Template(f.read()).render({
-                    'env': self.env
-                })
-                return yaml.load(
-                    template,
-                    Loader=yaml.FullLoader
-                )
-        except Exception as err:
-            raise Exception("Error loading YAML File") from err
+                    'var': self.var,
+                    'conn': self.conn,
+                    'extra_vars': extra_vars,
+                    'json_loads': loads,
+                    'generate_random_number': generate_random_number,
+                    'days_ago': days_ago
 
-    def env(self, varName):
-        return Variable.get(varName)
+                })
+                print(template)
+                return yaml.safe_load(template)
+        except Exception as err:
+            raise "Error loading YAML File" from err
+
+    def var(self, var_name, default=DEFAULT_NOT_SPECIFIED):
+        # Using this hack for allowing specifyin None as default
+        # and still break if no default is specified and the var
+        # is not defined at airflow
+        if default == DEFAULT_NOT_SPECIFIED:
+            return Variable.get(var_name)
+        else:
+            return Variable.get(var_name, default)
+
+    def conn(self, conn_name):
+        return BaseHook.get_connection(conn_name)
+
+
