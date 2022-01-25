@@ -3,8 +3,19 @@ from jinja2 import Template
 import yaml
 from airflow.hooks.base import BaseHook
 from json import loads
+from datetime import datetime
+import random 
 
+import airflow
 DEFAULT_NOT_SPECIFIED = 'DEFAULT_NOT_SPECIFIED'
+
+
+def days_ago(days):
+    return airflow.utils.dates.days_ago(days)
+
+
+def generate_random_number():
+    return random.randint(10000000, 99999999)
 
 class Parser:
     def render(self, filePath, extra_vars={}):
@@ -14,7 +25,10 @@ class Parser:
                     'var': self.var,
                     'conn': self.conn,
                     'extra_vars': extra_vars,
-                    'json_loads': loads
+                    'json_loads': loads,
+                    'generate_random_number': generate_random_number,
+                    'days_ago': days_ago
+
                 })
                 print(template)
                 return yaml.safe_load(template)
@@ -23,7 +37,7 @@ class Parser:
 
     def var(self, var_name, default=DEFAULT_NOT_SPECIFIED):
         # Using this hack for allowing specifyin None as default
-        # and still break if no default is specified and the var 
+        # and still break if no default is specified and the var
         # is not defined at airflow
         if default == DEFAULT_NOT_SPECIFIED:
             return Variable.get(var_name)
