@@ -13,10 +13,6 @@ DEFAULT_NOT_SPECIFIED = 'DEFAULT_NOT_SPECIFIED'
 def days_ago(days):
     return airflow.utils.dates.days_ago(days)
 
-
-def generate_random_number():
-    return random.randint(10000000, 99999999)
-
 class Parser:
     def render(self, filePath, extra_vars={}):
         try:
