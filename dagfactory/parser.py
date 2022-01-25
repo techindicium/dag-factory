@@ -22,11 +22,9 @@ class Parser:
                     'conn': self.conn,
                     'extra_vars': extra_vars,
                     'json_loads': loads,
-                    'generate_random_number': generate_random_number,
                     'days_ago': days_ago
 
                 })
-                print(template)
                 return yaml.safe_load(template)
         except Exception as err:
             raise "Error loading YAML File" from err
