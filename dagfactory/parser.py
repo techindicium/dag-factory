@@ -9,10 +9,6 @@ import random
 import airflow
 DEFAULT_NOT_SPECIFIED = 'DEFAULT_NOT_SPECIFIED'
 
-
-def days_ago(days):
-    return airflow.utils.dates.days_ago(days)
-
 class Parser:
     def render(self, filePath, extra_vars={}):
         try:
@@ -20,9 +16,9 @@ class Parser:
                 template = Template(f.read()).render({
                     'var': self.var,
                     'conn': self.conn,
+                    'days_ago': self.days_ago,
                     'extra_vars': extra_vars,
-                    'json_loads': loads,
-                    'days_ago': days_ago
+                    'json_loads': loads
 
                 })
                 return yaml.safe_load(template)
@@ -41,4 +37,5 @@ class Parser:
     def conn(self, conn_name):
         return BaseHook.get_connection(conn_name)
 
-
+    def days_ago(days):
+        return airflow.utils.dates.days_ago(days)
