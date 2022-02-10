@@ -37,5 +37,5 @@ class Parser:
     def conn(self, conn_name):
         return BaseHook.get_connection(conn_name)
 
-    def days_ago(days):
+    def days_ago(self, days):
         return airflow.utils.dates.days_ago(days)
